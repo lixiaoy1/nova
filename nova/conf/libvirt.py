@@ -1244,6 +1244,32 @@ maximum number of retry attempts that can be made to discover the NVMe device.
 """),
 ]
 
+libvirt_volume_nic_opts = [
+    cfg.BoolOpt('nic_enabled',
+                default=False,
+                help="""
+When installed SMARTNIC in the computer host, and would like to offload IOs to
+the hardware, set the option enabled; or else not.
+"""),
+    cfg.StrOpt('spdk_rpc_ip',
+               help="""
+IP of spdk in SMARTNIC.
+"""),
+    cfg.StrOpt('spdk_rpc_port',
+               help="""
+Port of spdk in SMARTNIC.
+"""),
+    cfg.StrOpt('spdk_rpc_user',
+               help="""
+User of spdk in SMARTNIC.
+"""),
+    cfg.StrOpt('spdk_rpc_password',
+               secret=True,
+               help="""
+IP of spdk in SMARTNIC.
+"""),
+]
+
 ALL_OPTS = list(itertools.chain(
     libvirt_general_opts,
     libvirt_imagebackend_opts,
@@ -1263,6 +1289,7 @@ ALL_OPTS = list(itertools.chain(
     libvirt_volume_vzstorage_opts,
     libvirt_virtio_queue_sizes,
     libvirt_volume_nvmeof_opts,
+    libvirt_volume_nic_opts,
 ))
 
 

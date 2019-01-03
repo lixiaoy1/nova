@@ -170,6 +170,7 @@ libvirt_volume_drivers = [
     'local=nova.virt.libvirt.volume.volume.LibvirtVolumeDriver',
     'drbd=nova.virt.libvirt.volume.drbd.LibvirtDRBDVolumeDriver',
     'fake=nova.virt.libvirt.volume.volume.LibvirtFakeVolumeDriver',
+    'nic_accelerator=nova.virt.libvirt.volume.nic_acclerator.LibvirtNICDriver',
     'rbd=nova.virt.libvirt.volume.net.LibvirtNetVolumeDriver',
     'sheepdog=nova.virt.libvirt.volume.net.LibvirtNetVolumeDriver',
     'nfs=nova.virt.libvirt.volume.nfs.LibvirtNFSVolumeDriver',
@@ -1207,6 +1208,9 @@ class LibvirtDriver(driver.ComputeDriver):
 
     def _get_volume_driver(self, connection_info):
         driver_type = connection_info.get('driver_volume_type')
+        # Use SMARTNIC instead
+        if driver_type == 'rbd' and CONF.libvirt.nic_enabled:
+            driver_type = 'nic_accelerator'
         if driver_type not in self.volume_drivers:
             raise exception.VolumeDriverNotFound(driver_type=driver_type)
         return self.volume_drivers[driver_type]
